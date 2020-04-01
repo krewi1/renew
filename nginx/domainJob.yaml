@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: domain-verification
+spec:
+  template:
+    spec:
+      containers:
+        - name: domain-verification
+          image: krewilone/renew
+          env:
+            - name: OWNER_EMAIL
+              value: "kratochvilp@post.cz"
+          command: ["http", "cerbify.com"]
+      restartPolicy: Never
+  backoffLimit: 4

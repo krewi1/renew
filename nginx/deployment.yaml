@@ -17,6 +17,16 @@ spec:
           image: nginx:1.14.2
           ports:
             - containerPort: 80
+          volumeMounts:
+            - mountPath: "/etc/nginx/html/shared"
+              name: shared
+      volumes:
+        - name: config
+          configMap:
+            name: nginx-conf
+        - name: shared
+          persistentVolumeClaim:
+            claimName: azurefile
 ---
 apiVersion: v1
 kind: Service
@@ -63,7 +73,7 @@ data:
         #gzip  on;
         server {
             listen 80;
-            server_name localhost muhehe.com www.muhehe.com;
+            server_name localhost ${DOMAIN};
 
             #http://muhehe.com/.well-known/acme-challenge/test-0603bc072e4a550ef93566b21b0b1d9c-0
             location ~* /.well-known/acme-challenge/(.*) {
@@ -71,4 +81,18 @@ data:
             }
         }
     }
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azurefile-premium
+provisioner: kubernetes.io/azure-file
+parameters:
+  skuName: azurefile-premium
+allowVolumeExpansion: false
+spec:
+  storageClassName: azurefile
+  resources:
+    requests:
+      storage: 1Gi
 
