@@ -59,7 +59,7 @@ function toChallengeType(type: string) {
     const [_bin, _runable, resolve, domain, dnsZone]= process.argv;
     log(`Challenge type: ${resolve} for domain: ${domain}`);
     const client = new acme.Client({
-        directoryUrl: acme.directory.letsencrypt.staging,
+        directoryUrl: acme.directory.letsencrypt[configuration.environment],
         accountKey: await acme.forge.createPrivateKey()
     });
 
