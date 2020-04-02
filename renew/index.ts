@@ -12,7 +12,7 @@ function createChallengeResolver(domain: string) {
     return async function challengeCreateFn(authz: acme.Authorization, challenge: Challenge, keyAuthorization: string) {
         if (challenge.type === 'dns-01') {
             log("DNS challenge");
-            return await createDnsTxtToken(domain, challenge.token);
+            await createDnsTxtToken(domain, challenge.token, keyAuthorization);
         }
         if (challenge.type === "http-01") {
             log("HTTP challenge");
