@@ -56,7 +56,7 @@ function toChallengeType(type: string) {
 
 (async function() {
     /* Init client */
-    const [_bin, _runable, resolve, domain]= process.argv;
+    const [_bin, _runable, resolve, domain, dnsZone]= process.argv;
     log(`Challenge type: ${resolve} for domain: ${domain}`);
     const client = new acme.Client({
         directoryUrl: acme.directory.letsencrypt.staging,
@@ -75,8 +75,8 @@ function toChallengeType(type: string) {
             ],
             email: configuration.ownerEmail,
             termsOfServiceAgreed: true,
-            challengeCreateFn: createChallengeResolver(domain),
-            challengeRemoveFn: createChallengeRemoved(domain)
+            challengeCreateFn: createChallengeResolver(dnsZone),
+            challengeRemoveFn: createChallengeRemoved(dnsZone)
         });
         log(`Private key:\n${key.toString()}`);
         log(`Certificate:\n${cert.toString()}`);
