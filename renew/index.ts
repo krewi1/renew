@@ -16,7 +16,7 @@ function createChallengeResolver(domain: string) {
         }
         if (challenge.type === "http-01") {
             log("HTTP challenge");
-            return await createHttpChallenge(challenge.token);
+            return await createHttpChallenge(challenge.token, keyAuthorization);
         }
     }
 }
@@ -78,8 +78,6 @@ function toChallengeType(type: string) {
             challengeCreateFn: createChallengeResolver(domain),
             challengeRemoveFn: createChallengeRemoved(domain)
         });
-        /* Done */
-        log(`CSR:\n${csr.toString()}`);
         log(`Private key:\n${key.toString()}`);
         log(`Certificate:\n${cert.toString()}`);
     } catch (e) {
